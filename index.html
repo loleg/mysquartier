@@ -34,12 +34,13 @@ $(function() {
 
       
       var poiCategoryScale = d3.scale.category10();
+      
       /*
       var poiCategories = {};
-      data.poi.features.forEach(function(d) { poiCategories[d.properties.CATEGORY] = true; })
+      data.poi.features.forEach(function(d) { poiCategories[d.properties.NAME] = true; })
       console.log(poiCategories);
-      poiCategoryScale.range(d3.keys(poiCategories));
       */
+      
 
 
       fitProjection(mapProj, data.gbk, [[0,0],[width, height]], true);
