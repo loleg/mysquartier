@@ -1,0 +1,67 @@
+   6862 Significant tree
+    321 Bus Stop
+    237 Restaurant
+    205 Parking
+    160 Pedestrian Crossing
+    136 Post Box
+     67 Tram stop
+     67 Public telephone
+     55 Fast Food Restaurant
+     41 Cafe
+     35 ATM
+     33 Pharmacy
+     29 Toilets
+     25 Fountain
+     24 Recycling
+     23 Hotel
+     22 Pub
+     21 Post office
+     21 Fuel
+     20 Railway station
+     19 Information source
+     17 View point
+     16 Level crossing
+     16 Cinema
+     13 College
+     13 Bank
+     12 Power Tower
+     12 Bicycle parking
+     11 School
+     10 Library
+      9 Drinking water source
+      8 Theater
+      8 Sports Center
+      8 Museum
+      6 Picnic spot
+      5 Playground
+      5 Park
+      5 Attraction
+      4 University
+      4 Gymnastics
+      4 Car rental
+      3 Place of Worship
+      3 Hospital
+      3 Guest house
+      3 Bus station
+      2 Veterinary
+      2 TV, Radio Studio
+      2 Taxi
+      2 Public pieces of art
+      2 Police station
+      2 Emergency Access point
+      2 Currency exchange
+      2 Building
+      1 Tower
+      1 Table_tennis
+      1 Swimming
+      1 Stadium
+      1 Spring
+      1 Pitch
+      1 Garden
+      1 Court house
+      1 Climbing
+      1 Chalet
+      1 Beer Garden
+      1 Athletics
+      1 10-pin Bowling
+      1 
