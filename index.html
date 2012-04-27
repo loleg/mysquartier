@@ -1,0 +1,82 @@
+<html>
+<head>
+    <style type="text/css">
+    /*path { fill:#ccc; stroke:#000; stroke-width:1; }*/
+    </style>
+</head>
+<body>
+
+<script type="text/javascript" src="assets/lib/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="assets/lib/d3.v2.min.js"></script>
+<script type="text/javascript" src="assets/js/load-data.js"></script>
+<script type="text/javascript" src="assets/js/fit-projection.js"></script>
+
+<div id="map"></div>
+
+<script>
+$(function() {
+
+  d3.loadData()
+  .json("gbk", "data/bern-gbk.geojson")
+  .json("poi", "data/bern-poi.geojson")
+  .onload(function(data) {
+
+      var width = $(document).width();
+      var height = $(document).height();
+      var mapProj = d3.geo.mercator();
+      var mapProjPath = d3.geo.path().projection(mapProj);
+
+
+
+      var vis = d3.select("#map").append("svg:svg")
+          .attr("width", width)
+          .attr("height", height);
+
+      
+      var poiCategoryScale = d3.scale.category10();
+      
+      /*
+      var poiCategories = {};
+      data.poi.features.forEach(function(d) { poiCategories[d.properties.NAME] = true; })
+      console.log(poiCategories);
+      */
+      
+
+
+      fitProjection(mapProj, data.gbk, [[0,0],[width, height]], true);
+
+      vis.selectAll("path")
+          .data(data.gbk.features)
+      .enter().append("path")
+          .attr("class", "gbk")
+          .attr("d", mapProjPath)
+          .attr("fill", "rgb(230,230,230)")
+          .attr("stroke", "rgb(200,200,200)")
+          .attr("stroke-width", "0.5");
+
+
+      vis.selectAll("circle")
+          .data(data.poi.features)
+      .enter().append("circle")
+          .attr("class", "poi")
+          .attr("opacity", .5)
+          .attr('cx', function(d) {
+           return mapProj(d.geometry.coordinates)[0]; 
+         })
+          .attr('cy', function(d) { return mapProj(d.geometry.coordinates)[1]; })
+          .attr("r", 2)
+          .attr("fill", function(d) {  return poiCategoryScale(d.properties.CATEGORY); } )
+          //.attr("stroke", "rgb(100,100,100)")
+          //.attr("stroke-width", "0.5");
+
+
+  });
+
+}
+);
+
+</script>
+
+
+</body>
+</html>
