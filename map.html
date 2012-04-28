@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<title>OpenLayers Simplest Example</title>
+<div id="demoMap" style="height:600px"></div>
+<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+    map = new OpenLayers.Map("demoMap");
+	map.addLayer(new OpenLayers.Layer.OSM());
+	
+	// #####################
+	
+	// layer 1
+	map.addLayer(new OpenLayers.Layer.Vector("bern-gbk", {
+            strategies: [new OpenLayers.Strategy.Fixed()],
+            protocol: new OpenLayers.Protocol.HTTP({
+                url: "data/bern-gbk.kml",
+                format: new OpenLayers.Format.KML({
+                    extractStyles: true, 
+                    extractAttributes: true,
+                    maxDepth: 2
+                })
+            })
+		}));
+	
+	
+	// layer 2
+	var vectorlayer = new OpenLayers.Layer.Vector("Points of Interest", {
+            strategies: [new OpenLayers.Strategy.Fixed()],
+            protocol: new OpenLayers.Protocol.HTTP({
+                url: "data/bern-poi.kml",
+                format: new OpenLayers.Format.KML({
+                    extractStyles: true, 
+                    extractAttributes: true,
+                    maxDepth: 2
+                })
+            }),
+            eventListeners: { "loadend": processMap }
+		})
+	
+	map.addLayer(vectorlayer);
+	
+	
+	// #####################
+	
+    map.addControl(new OpenLayers.Control.LayerSwitcher());
+	map.setCenter(new OpenLayers.LonLat(   7.437502455781521, 46.94859787885343).transform(
+	
+		new OpenLayers.Projection("EPSG:4326"),
+		new OpenLayers.Projection("EPSG:900913")
+	
+	), 14);
+	
+	
+	var categories = [
+{ n: "Kinder",
+  c: [ 
+  	"Playground",
+    "Park",
+    "Garden"
+   ],
+  icon: 'http://localhost/mysquartier/icons/icon-kinder.png'
+},{ n: "OV",
+  c: [ 
+  	"Tram stop",
+    "Railway station",
+    "Bus Stop",
+    "Bus station"
+   ],
+  icon: 'http://localhost/mysquartier/icons/icon-bus.png'
+},{ n: "Entertainment",
+  c: [ 
+  	"Restaurant",
+    "Cafe",
+    "Fast Food Restaurant",
+    "Pub"
+   ],
+  icon: 'http://localhost/mysquartier/icons/icon-resto.png'
+},{ n: "Culture",
+  c: [ 
+    "Cinema",
+    "Theater",
+    "Museum",
+    "Library"
+   ],
+  icon: 'http://localhost/mysquartier/icons/icon-culture.gif'
+},{ n: "Party",
+  c: [ 
+    "Beer Garden"
+   ],
+   icon: 'http://localhost/mysquartier/icons/icon-party.gif' 
+},{ n: "Schulen",
+  c: [ 
+    "College",
+    "University",
+    "School"
+   ],
+   icon: 'http://localhost/mysquartier/icons/icon-school.png'
+}
+];
+   
+	
+	function processMap() {
+		
+		var typeCategory = {};
+		   for (var u in categories) {
+		   	categories[u].features = [];
+		   	for (var w in categories[u].c) {
+		   		typeCategory[categories[u].c[w].toLowerCase()] = u;
+		   	}
+		   }
+		
+		var numFeatures = vectorlayer.features.length;
+		console.log("Parsing " + numFeatures + " features");
+		
+		for (var i = 0; i < numFeatures; i++) {
+			var name = vectorlayer.features[i].data.name;
+			if (name.indexOf(':') > 0) name = name.substring(0, name.indexOf(':'));		
+			name = $.trim(name).toLowerCase();
+//			console.log(name);	
+	
+			if (typeof categories[typeCategory[name]] != "undefined") {
+				categories[typeCategory[name]].features.push(vectorlayer.features[i]);
+			}
+		}
+		
+		map.removeLayer(vectorlayer);
+		
+		for (var u in categories) {
+			var defaultStyle = new OpenLayers.Style({
+			  'pointRadius': 10,
+			  'externalGraphic': categories[u].icon
+			});
+
+			var selectStyle = new OpenLayers.Style({
+			  'pointRadius': 20
+			});
+		
+			var styleMap = new OpenLayers.StyleMap({'default': defaultStyle,
+		                     'select': selectStyle});
+
+			// 3
+		
+			map.addLayer(new OpenLayers.Layer.Vector( categories[u].n,
+							{styleMap: styleMap}));
+						
+			var newlayer = map.layers[map.layers.length-1];
+	
+			newlayer.setVisibility(false);
+			newlayer.addFeatures(categories[u].features);
+		}
+	}
+	
+	
+</script>
